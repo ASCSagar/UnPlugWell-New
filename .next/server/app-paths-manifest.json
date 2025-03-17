@@ -1,8 +1,0 @@
-{
-  "/_not-found/page": "app/_not-found/page.js",
-  "/cookies/page": "app/cookies/page.js",
-  "/disclaimer/page": "app/disclaimer/page.js",
-  "/blogs/page": "app/blogs/page.js",
-  "/blog/[slug]/page": "app/blog/[slug]/page.js",
-  "/categories/page": "app/categories/page.js"
-}
