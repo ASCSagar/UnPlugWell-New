@@ -53,11 +53,12 @@ export default function Categories() {
         <div className="absolute inset-0 bg-grid-white/[0.05]" />
         <div className="relative container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               Categories
             </h1>
             <p className="text-xl text-purple-100 mb-8">
-              Discover focused content across various aspects of digital wellness
+              Discover focused content across various aspects of digital
+              wellness
             </p>
             <div className="relative max-w-2xl mx-auto">
               <input
@@ -130,9 +131,7 @@ export default function Categories() {
           </div>
         ) : (
           <div className="flex justify-center items-center">
-            <div className="text-center text-gray-600">
-              No Category Found.
-            </div>
+            <div className="text-center text-gray-600">No Category Found.</div>
           </div>
         )}
       </section>
