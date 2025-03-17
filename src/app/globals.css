@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Define CSS variables for your theme colors */
+:root {
+  --background: #FAFAFF;
+  --foreground: #483D8B;
+  --lavender-light: #F0E2FD;
+  --lavender: #E0C6FF;
+  --lavender-dark: #C5A2EC;
+  --lavender-secondary-light: #F5F0FF;
+  --lavender-secondary: #D8BFD8;
+  --lavender-secondary-dark: #A78BA7;
+  --accent-lilac: #C8A2C8;
+  --accent-periwinkle: #CCCCFF;
+  --accent-violet: #9966CC;
+  --accent-wisteria: #D4BBEB;
+  --accent-mauve: #E0B0FF;
+  --text-color-primary: #483D8B;
+  --text-color-secondary: #6A5ACD;
+  --background-color-default: #FAFAFF;
+  --background-color-paper: #FFFFFF;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  background-color: var(--background-color-default);
+  color: var(--text-color-primary);
+}
+
+.blob-container {
+  overflow: hidden;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes gradient-x {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-gradient-x {
+  animation: gradient-x 15s ease infinite;
+  background-size: 200% 200%;
+}
+
+.animation-delay-1500 {
+  animation-delay: 1.5s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-3000 {
+  animation-delay: 0.1ms;
+}
+
+.animation-delay-4000 {
+  animation-delay: 0.3s;
+}
+
+/* Add these utility classes for consistent application */
+@layer components {
+  .lavender-gradient {
+    @apply bg-gradient-to-r from-lavender to-lavenderSecondary;
+  }
+  
+  .lavender-gradient-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-textColor-primary to-lavender-dark;
+  }
+  
+  .card-shadow {
+    @apply shadow-card hover:shadow-card-hover transition-all duration-300;
+  }
+  
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+}
