@@ -1,4 +1,3 @@
-// components/AdUnit/AdUnit.jsx
 "use client";
 import { useEffect, useRef } from 'react';
 
@@ -6,7 +5,6 @@ export default function AdUnit({ className = "", format = "rectangle" }) {
   const adRef = useRef(null);
   
   useEffect(() => {
-    // Define format dimensions
     const formats = {
       rectangle: { width: 300, height: 250 },
       leaderboard: { width: 728, height: 90 },
@@ -17,9 +15,7 @@ export default function AdUnit({ className = "", format = "rectangle" }) {
     
     const selectedFormat = formats[format] || formats.rectangle;
     
-    // Only run this on client side
     if (typeof window !== 'undefined') {
-      // Set atOptions for this specific ad unit
       window.atOptions = {
         'key': '972d48c5a9dca92a769dac63b0030ab9',
         'format': 'iframe',
@@ -28,21 +24,17 @@ export default function AdUnit({ className = "", format = "rectangle" }) {
         'params': {}
       };
       
-      // Create script element
       const script = document.createElement('script');
       script.src = '//www.highperformanceformat.com/972d48c5a9dca92a769dac63b0030ab9/invoke.js';
       script.async = true;
       
-      // Append to our ref
       if (adRef.current) {
         adRef.current.appendChild(script);
       }
     }
     
-    // Cleanup function
     return () => {
       if (adRef.current) {
-        // Remove any scripts we added
         const scripts = adRef.current.querySelectorAll('script');
         scripts.forEach(script => script.remove());
       }

@@ -3,7 +3,6 @@ import ResponsiveBlogContainer from "@/components/BlogDetails/ResponsiveBlogCont
 
 export const generateMetadata = async ({ params }) => {
   try {
-    // Await params before accessing slug
     const resolvedParams = await params;
     const slug = resolvedParams?.slug;
     if (!slug) {
@@ -12,7 +11,6 @@ export const generateMetadata = async ({ params }) => {
         description: "Unplugwell Blog",
       };
     }
-    // Fetch blog data
     const { data: blog } = await axios.get(
       `https://unplugwell.com/blog/api/post/${slug}/`
     );
@@ -42,7 +40,6 @@ export const generateMetadata = async ({ params }) => {
 };
 
 export default async function BlogDetail({ params }) {
-  // Await params before accessing slug
   const resolvedParams = await params;
   const slug = resolvedParams?.slug;
   if (!slug) {

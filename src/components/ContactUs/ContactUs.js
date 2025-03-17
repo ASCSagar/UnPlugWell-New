@@ -1,35 +1,55 @@
 "use client";
-import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 import {
   Mail,
   MessageSquare,
   Send,
   User,
-  Sparkles,
   PhoneCall,
   MapPin,
   ArrowRight,
 } from "lucide-react";
 
 const ContactUs = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post(
+        "https://unplugwell.com/blog/api/message/message/",
+        { ...data, site: "2" }
+      );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
+      if (response.status === 200 || response.status === 201) {
+        toast.success("Message sent successfully! 🎉");
+        reset();
+      } else {
+        toast.error("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("An error occurred. Please try again later.");
+    }
   };
 
   return (
     <div className="py-12 min-h-screen bg-gradient-to-r from-indigo-50 to-pink-50 px-4 sm:px-6 lg:px-8">
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="relative py-16 sm:py-20">
         <div className="absolute inset-0 bg-grid-white/[0.05]" />
         <div className="relative max-w-7xl mx-auto">
@@ -52,7 +72,7 @@ const ContactUs = () => {
               <h2 className="text-2xl font-bold text-gray-800 mb-6">
                 Send Us a Message
               </h2>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
                     <label
@@ -65,15 +85,25 @@ const ContactUs = () => {
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <User className="h-5 w-5 text-gray-400" />
                       </div>
-                      <input
-                        type="text"
-                        id="name"
+                      <Controller
                         name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="pl-10 w-full py-3 px-4 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-colors"
-                        placeholder="Jane Doe"
+                        control={control}
+                        rules={{ required: "Name is required" }}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            id="name"
+                            className="pl-10 w-full py-3 px-4 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-colors"
+                            placeholder="Jane Doe"
+                          />
+                        )}
                       />
+                      {errors.name && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.name.message}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -87,15 +117,31 @@ const ContactUs = () => {
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <Mail className="h-5 w-5 text-gray-400" />
                       </div>
-                      <input
-                        type="email"
-                        id="email"
+                      <Controller
                         name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="pl-10 w-full py-3 px-4 bg-gray-50 border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-colors"
-                        placeholder="you@example.com"
+                        control={control}
+                        rules={{
+                          required: "Email is required",
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            message: "Invalid email address",
+                          },
+                        }}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="email"
+                            id="email"
+                            className="pl-10 w-full py-3 px-4 bg-gray-50 border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-colors"
+                            placeholder="you@example.com"
+                          />
+                        )}
                       />
+                      {errors.email && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.email.message}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -111,14 +157,18 @@ const ContactUs = () => {
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <MessageSquare className="h-5 w-5 text-gray-400" />
                     </div>
-                    <input
-                      type="text"
-                      id="subject"
+                    <Controller
                       name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      className="pl-10 w-full py-3 px-4 bg-gray-50 border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-colors"
-                      placeholder="How can we help you?"
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          type="text"
+                          id="subject"
+                          className="pl-10 w-full py-3 px-4 bg-gray-50 border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-colors"
+                          placeholder="How can we help you?"
+                        />
+                      )}
                     />
                   </div>
                 </div>
@@ -130,15 +180,25 @@ const ContactUs = () => {
                   >
                     Your Message
                   </label>
-                  <textarea
-                    id="message"
+                  <Controller
                     name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows="5"
-                    className="w-full py-3 px-4 bg-gray-50  border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-colors"
-                    placeholder="Tell us how we can help with your digital wellness journey..."
-                  ></textarea>
+                    control={control}
+                    rules={{ required: "Message is required" }}
+                    render={({ field }) => (
+                      <textarea
+                        {...field}
+                        id="message"
+                        rows="5"
+                        className="w-full py-3 px-4 bg-gray-50 border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-300 transition-colors"
+                        placeholder="Tell us how we can help with your digital wellness journey..."
+                      />
+                    )}
+                  />
+                  {errors.message && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.message.message}
+                    </p>
+                  )}
                 </div>
                 <button
                   type="submit"
@@ -206,7 +266,7 @@ const ContactUs = () => {
                   <li>
                     <a
                       href="/faq#detox-plan"
-                      className="flex items-center text-gray-700 hover:text-gray-900  group"
+                      className="flex items-center text-gray-700 hover:text-gray-900 group"
                     >
                       <ArrowRight className="h-4 w-4 mr-2 text-gray-500 transform transition-transform group-hover:translate-x-1" />
                       <span>How do I create a digital detox plan?</span>
@@ -215,7 +275,7 @@ const ContactUs = () => {
                   <li>
                     <a
                       href="/faq#workplace"
-                      className="flex items-center text-gray-700 hover:text-gray-900  group"
+                      className="flex items-center text-gray-700 hover:text-gray-900 group"
                     >
                       <ArrowRight className="h-4 w-4 mr-2 text-gray-500 transform transition-transform group-hover:translate-x-1" />
                       <span>Digital wellness solutions for workplaces</span>
@@ -224,7 +284,7 @@ const ContactUs = () => {
                   <li>
                     <a
                       href="/faq#screen-time"
-                      className="flex items-center text-gray-700 hover:text-gray-900  group"
+                      className="flex items-center text-gray-700 hover:text-gray-900 group"
                     >
                       <ArrowRight className="h-4 w-4 mr-2 text-gray-500 transform transition-transform group-hover:translate-x-1" />
                       <span>Managing children's screen time</span>
@@ -233,7 +293,7 @@ const ContactUs = () => {
                   <li>
                     <a
                       href="/faq#newsletter"
-                      className="flex items-center text-gray-700 hover:text-gray-900  group"
+                      className="flex items-center text-gray-700 hover:text-gray-900 group"
                     >
                       <ArrowRight className="h-4 w-4 mr-2 text-gray-500 transform transition-transform group-hover:translate-x-1" />
                       <span>How to subscribe to our newsletter</span>

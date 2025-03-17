@@ -63,6 +63,11 @@ const Footer = () => {
               href="/"
               className="flex items-center space-x-2 text-2xl font-bold text-white"
             >
+              <img
+                src="/unplugwell.png"
+                alt="Unplugwell"
+                className="h-8 w-auto"
+              />
               <span className="text-xl md:inline-block ml-2">Unplugwell</span>
             </Link>
             <p className="mt-4 text-gray-400">
